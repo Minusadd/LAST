@@ -76,6 +76,8 @@ Train a LAST agent:
 $ python algorithm.py --name train_last --train 1 --include_goal 1 --ent_weight 0.1 --kl_weight 0.0001
 ```
 Evaluate the agent on the dataset:
+
+First, download our [checkpoint](https://drive.google.com/file/d/1NNjreeoKduyWa7AhR27pojLHhaRUeEVx/view?usp=sharing) and put it in saved_nets/, then,
 ```bash
 $ python algorithm.py --name test_last --train 0 --include_goal 1 --ent_weight 0.1 --kl_weight 0.0001 --model saved_nets/Model_epoch70
 ```
