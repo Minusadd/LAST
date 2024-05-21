@@ -9,7 +9,7 @@ We present an algorithm for skill discovery from expert demonstrations. The algo
 ## Setup
 Clone repo:
 ```bash
-$ git clone https://github.com/alexpashevich/E.T..git LAST
+$ git clone https://github.com/Minusadd/LAST.git LAST
 ```
 
 Install requirements:
