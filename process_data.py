@@ -1,3 +1,5 @@
+#process the data given the initial segmentation results from gpt4
+
 import copy
 import os
 import json
@@ -214,73 +216,73 @@ for json_file in os.listdir(json_dir):
         iter+=1
 
 
-
-img_dir = "../../../data/ET/data/generated_2.1.0/train/"
-
-def read_traj_images(json_path, image_folder):
-    root_path = json_path.parents[0]
-    with open(json_path) as json_file:
-        json_dict = json.load(json_file)
-    image_names = [None] * len(json_dict['plan']['low_actions'])
-    for im_idx, im_dict in enumerate(json_dict['images']):
-
-        if image_names[im_dict['low_idx']] is None:
-            image_names[im_dict['low_idx']] = im_dict['image_name']
-    before_last_image = json_dict['images'][-1]['image_name']
-    last_image = '{:09d}.png'.format(int(before_last_image.split('.')[0]) + 1)
-    image_names.append(last_image)
-    fimages = [image_folder / im for im in image_names]
-
-    if not any([os.path.exists(path) for path in fimages]):
-        # maybe images were compressed to .jpg instead of .png
-        fimages = [Path(str(path).replace('.png', '.jpg')) for path in fimages]
-    if not all([os.path.exists(path) for path in fimages]):
-        return None
-    assert len(fimages) > 0
-    # this reads on images (works with render_trajs.py)
-    # fimages = sorted(glob.glob(os.path.join(root_path, image_folder, '*.png')))
-    try:
-        images = read_images(fimages)
-    except:
-        return None
-    return images
-
-def read_images(image_path_list):
-    images = []
-    for image_path in image_path_list:
-        image_orig = Image.open(image_path)
-        images.append(image_orig.copy())
-        image_orig.close()
-    return images
-
-def extract_features(images, extractor):
-    if images is None:
-        return None
-    feat = extractor.featurize(images, batch=8)
-    return feat.cpu()
-
-output_img_dir = "./images_feats"
-os.makedirs(output_img_dir, exist_ok=True)
-extractor = FeatureExtractor(
-        'fasterrcnn', 'cuda', "./pretrained/fasterrcnn_model.pth",
-        share_memory=True, compress_type='4x', load_heads=False)
-obj_predictor = FeatureExtractor(
-        archi='maskrcnn', device='cuda',
-        checkpoint="./pretrained/maskrcnn_model.pth", load_heads=True)
-for i, json_file in enumerate(os.listdir(json_dir)):
-    print(i)
-    if json_file.endswith('.json'):
-        if os.path.exists(output_img_dir + '/' + f'image_tensor_{i+start_idx}.pt'):
-            continue
-        else:
-            task_name, trial_name = split_string(json_file.split('.')[0])
-            temp_p = img_dir + task_name + "/" + trial_name
-            json_orig = Path(temp_p + "/" + "traj_data.json")
-            temp_img = Path(temp_p + "/" + "raw_images")
-            images = read_traj_images(json_orig, temp_img)
-            feat = extract_features(images, extractor)
-            torch.save(feat, output_img_dir + '/' + f'image_tensor_{i+start_idx}.pt')
-    print("image done")
+# -----------------------------------------uncomment below if you have the images---------------------------------------
+# img_dir = "../../../data/ET/data/generated_2.1.0/train/"
+#
+# def read_traj_images(json_path, image_folder):
+#     root_path = json_path.parents[0]
+#     with open(json_path) as json_file:
+#         json_dict = json.load(json_file)
+#     image_names = [None] * len(json_dict['plan']['low_actions'])
+#     for im_idx, im_dict in enumerate(json_dict['images']):
+#
+#         if image_names[im_dict['low_idx']] is None:
+#             image_names[im_dict['low_idx']] = im_dict['image_name']
+#     before_last_image = json_dict['images'][-1]['image_name']
+#     last_image = '{:09d}.png'.format(int(before_last_image.split('.')[0]) + 1)
+#     image_names.append(last_image)
+#     fimages = [image_folder / im for im in image_names]
+#
+#     if not any([os.path.exists(path) for path in fimages]):
+#         # maybe images were compressed to .jpg instead of .png
+#         fimages = [Path(str(path).replace('.png', '.jpg')) for path in fimages]
+#     if not all([os.path.exists(path) for path in fimages]):
+#         return None
+#     assert len(fimages) > 0
+#     # this reads on images (works with render_trajs.py)
+#     # fimages = sorted(glob.glob(os.path.join(root_path, image_folder, '*.png')))
+#     try:
+#         images = read_images(fimages)
+#     except:
+#         return None
+#     return images
+#
+# def read_images(image_path_list):
+#     images = []
+#     for image_path in image_path_list:
+#         image_orig = Image.open(image_path)
+#         images.append(image_orig.copy())
+#         image_orig.close()
+#     return images
+#
+# def extract_features(images, extractor):
+#     if images is None:
+#         return None
+#     feat = extractor.featurize(images, batch=8)
+#     return feat.cpu()
+#
+# output_img_dir = "./images_feats"
+# os.makedirs(output_img_dir, exist_ok=True)
+# extractor = FeatureExtractor(
+#         'fasterrcnn', 'cuda', "./pretrained/fasterrcnn_model.pth",
+#         share_memory=True, compress_type='4x', load_heads=False)
+# obj_predictor = FeatureExtractor(
+#         archi='maskrcnn', device='cuda',
+#         checkpoint="./pretrained/maskrcnn_model.pth", load_heads=True)
+# for i, json_file in enumerate(os.listdir(json_dir)):
+#     print(i)
+#     if json_file.endswith('.json'):
+#         if os.path.exists(output_img_dir + '/' + f'image_tensor_{i+start_idx}.pt'):
+#             continue
+#         else:
+#             task_name, trial_name = split_string(json_file.split('.')[0])
+#             temp_p = img_dir + task_name + "/" + trial_name
+#             json_orig = Path(temp_p + "/" + "traj_data.json")
+#             temp_img = Path(temp_p + "/" + "raw_images")
+#             images = read_traj_images(json_orig, temp_img)
+#             feat = extract_features(images, extractor)
+#             torch.save(feat, output_img_dir + '/' + f'image_tensor_{i+start_idx}.pt')
+#     print("image done")
 
 
 output_mask_dir = "./masks_feats"
