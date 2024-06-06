@@ -87,7 +87,7 @@ $ python algorithm.py --name test_last --train 0 --include_goal 1 --ent_weight 0
 If you find this repository useful, please cite our work:
 ```
 @inproceedings{fu2024languageskill,
-  title     = {{Language-guided Skill Learning with Temporal Variational Inference}},
+  title     = {Language-guided Skill Learning with Temporal Variational Inference},
   author    = {Haotian Fu and Pratyusha Sharma and Elias Stengel-Eskin and George Konidaris and Nicolas Le Roux and Marc-Alexandre Côté and Xingdi Yuan},
   booktitle = {ICML},
   year      = {2024},
