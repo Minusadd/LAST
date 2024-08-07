@@ -1,7 +1,6 @@
 # Language-guided Skill Learning with Temporal Variational Inference (LAST)
 
-[Paper link](https://arxiv.org/abs/2402.16354) _ICML 2024_
-[Website link](https://language-skill-discovery.github.io/)
+Published at _ICML 2024_: [Paper link](https://arxiv.org/abs/2402.16354) [Website link](https://language-skill-discovery.github.io/)
 
 We present an algorithm for skill discovery from expert demonstrations. The algorithm first utilizes Large Language Models (LLMs) to propose an initial segmentation of the trajectories. Following that, a hierarchical variational inference framework incorporates the LLM-generated segmentation information to discover reusable skills by merging trajectory segments. To further control the trade-off between compression and reusability, we introduce a novel auxiliary objective based on the Minimum Description Length principle that helps guide this skill discovery process. 
 
